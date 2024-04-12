@@ -1016,7 +1016,7 @@ int	mkpathat(int, const char *);
 #define MAX_IO_TIMEOUT		30
 
 /* Maximum number of delegated hosting locations (repositories) for each TAL. */
-#define MAX_REPO_PER_TAL	1000
+#define MAX_REPO_PER_TAL	10
 
 #define HTTP_PROTO		"http://"
 #define HTTP_PROTO_LEN		(sizeof(HTTP_PROTO) - 1)
