@@ -541,8 +541,7 @@ x509_get_sia(X509 *x, const char *fn, char **sia)
 
 			rsync_found = 1;
 
-			if (filemode)
-				continue;
+			continue;
 
 			fnlen = strlen(fn);
 			plen = strlen(p);
