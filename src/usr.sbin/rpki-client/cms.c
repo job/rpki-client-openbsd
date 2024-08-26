@@ -231,17 +231,6 @@ cms_parse_validate_internal(X509 **xp, const char *fn, const unsigned char *der,
 		goto out;
 	}
 
-<<<<<<< HEAD
-	if (has_bst)
-		warnx("%s: unsupported CMS signing-time attribute", fn);
-=======
-	if (!has_st) {
-		/* RFC 9589, section 4 */
-		warnx("%s: missing CMS signing-time attribute", fn);
-		goto out;
-	}
->>>>>>> parent/master
-
 	if (CMS_unsigned_get_attr_count(si) != -1) {
 		warnx("%s: RFC 6488: CMS has unsignedAttrs", fn);
 		goto out;
