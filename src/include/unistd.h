@@ -1,4 +1,4 @@
-/*	$OpenBSD: unistd.h,v 1.108 2023/12/12 15:30:55 deraadt Exp $ */
+/*	$OpenBSD: unistd.h,v 1.111 2024/08/02 22:14:54 guenther Exp $ */
 /*	$NetBSD: unistd.h,v 1.26.4.1 1996/05/28 02:31:51 mrg Exp $	*/
 
 /*-
@@ -357,6 +357,9 @@ int	 isatty(int);
 int	 link(const char *, const char *);
 off_t	 lseek(int, off_t, int);
 long	 pathconf(const char *, int);
+#if __BSD_VISIBLE
+long	 pathconfat(int, const char *, int, int);
+#endif
 int	 pause(void);
 int	 pipe(int *);
 ssize_t	 read(int, void *, size_t)
@@ -468,6 +471,16 @@ int	symlinkat(const char *, int, const char *);
 int	unlinkat(int, const char *, int);
 #endif
 
+#if __POSIX_VISIBLE >= 202405 || __BSD_VISIBLE
+int	getentropy(void *, size_t);
+#endif
+#if __XPG_VISIBLE >= 800 || __BSD_VISIBLE
+int	getresgid(gid_t *, gid_t *, gid_t *);
+int	getresuid(uid_t *, uid_t *, uid_t *);
+int	setresgid(gid_t, gid_t, gid_t);
+int	setresuid(uid_t, uid_t, uid_t);
+#endif
+
 #if __BSD_VISIBLE
 int	dup3(int, int, int);
 int	pipe2(int [2], int);
@@ -485,8 +498,6 @@ int	 getdomainname(char *, size_t)
 int	 getdtablecount(void);
 int	 getgrouplist(const char *, gid_t, gid_t *, int *);
 mode_t	 getmode(const void *, mode_t);
-int	 getresgid(gid_t *, gid_t *, gid_t *);
-int	 getresuid(uid_t *, uid_t *, uid_t *);
 pid_t	 getthrid(void);
 int	 getthrname(pid_t, char *, size_t);
 char	*getusershell(void);
@@ -516,13 +527,10 @@ int	 sethostname(const char *, size_t);
 int	 setlogin(const char *);
 void	*setmode(const char *);
 int	 setpgrp(pid_t _pid, pid_t _pgrp);	/* BSD compat version */
-int	 setresgid(gid_t, gid_t, gid_t);
-int	 setresuid(uid_t, uid_t, uid_t);
 int	 setthrname(pid_t, const char *);
 void	 setusershell(void);
 int	 strtofflags(char **, u_int32_t *, u_int32_t *);
 int	 swapctl(int cmd, const void *arg, int misc);
-int	 getentropy(void *, size_t);
 int	 pledge(const char *, const char *);
 int	 unveil(const char *, const char *);
 pid_t	 __tfork_thread(const struct __tfork *, size_t, void (*)(void *),

@@ -1,4 +1,4 @@
-/*	$OpenBSD: http.c,v 1.82 2024/03/22 03:38:12 job Exp $ */
+/*	$OpenBSD: http.c,v 1.86 2024/08/20 13:31:49 claudio Exp $ */
 /*
  * Copyright (c) 2020 Nils Fisher <nils_fisher@hotmail.com>
  * Copyright (c) 2020 Claudio Jeker <claudio@openbsd.org>
@@ -1162,7 +1162,8 @@ proxy_connect(struct http_connection *conn)
 	conn->bufpos = 0;
 	/* XXX handle auth */
 	if ((r = asprintf(&conn->buf, "CONNECT %s HTTP/1.1\r\n"
-	    "User-Agent: " HTTP_USER_AGENT "\r\n%s\r\n", host,
+	    "Host: %s\r\n"
+	    "User-Agent: " HTTP_USER_AGENT "\r\n%s\r\n", host, host,
 	    proxy.proxyauth)) == -1)
 		err(1, NULL);
 	conn->bufsz = r;
@@ -1221,6 +1222,7 @@ http_request(struct http_connection *conn)
 	if ((r = asprintf(&conn->buf,
 	    "GET /%s HTTP/1.1\r\n"
 	    "Host: %s\r\n"
+	    "Accept: */*\r\n"
 	    "Accept-Encoding: gzip, deflate\r\n"
 	    "User-Agent: " HTTP_USER_AGENT "\r\n"
 	    "%s\r\n",
@@ -2075,7 +2077,7 @@ proc_http(char *bind_addr, int fd)
 		memset(&pfds, 0, sizeof(pfds));
 		pfds[0].fd = fd;
 		pfds[0].events = POLLIN;
-		if (msgq.queued)
+		if (msgbuf_queuelen(&msgq) > 0)
 			pfds[0].events |= POLLOUT;
 
 		i = 1;
