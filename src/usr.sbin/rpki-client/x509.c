@@ -633,13 +633,6 @@ x509_get_sia(X509 *x, const char *fn, char **out_sia)
 			fnlen = strlen(fn);
 			plen = strlen(p);
 
-			if (fnlen < plen || strcmp(p, fn + fnlen - plen) != 0) {
-				warnx("%s: mismatch between pathname and SIA "
-				    "(%s)", fn, sia);
-				free(sia);
-				goto out;
-			}
-
 			*out_sia = sia;
 			continue;
 		}
